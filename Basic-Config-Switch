@@ -1,0 +1,66 @@
+Current configuration : 1547 bytes
+!
+version 15.0
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname Sw-C-Genk
+!
+enable secret S-C-G-Enable
+!
+ip domain-name genk.corp.com
+!
+username Sw-C-Genk privilege 1 password S-C-G-Ssh
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+interface FastEthernet0/1
+interface FastEthernet0/2
+interface FastEthernet0/3
+interface FastEthernet0/4
+interface FastEthernet0/5
+!
+interface FastEthernet0/10
+interface FastEthernet0/11
+interface FastEthernet0/12
+interface FastEthernet0/13
+interface FastEthernet0/14
+interface FastEthernet0/15
+!
+interface FastEthernet0/20
+interface FastEthernet0/21
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ ip address 192.168.0.2 255.255.255.240
+!
+ip default-gateway 192.168.0.1
+!
+ip access-list extended SSH-ACCESS
+ permit ip host 192.168.0.13 any
+ permit ip host 192.168.0.14 any
+ deny ip any any
+line con 0
+ password S-C-G-Console
+ login
+!
+line vty 0 4
+ access-class SSH-ACCESS in
+ login local
+ transport input ssh
+line vty 5 15
+ access-class SSH-ACCESS in
+ login local
+ transport input ssh
+!
+end
