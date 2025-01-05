@@ -1,0 +1,65 @@
+Current configuration : 1156 bytes
+!
+version 15.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname R-Genk
+!
+enable secret R-G-Enable
+!
+ip cef
+ipv6 unicast-routing
+!
+no ipv6 cef
+!
+username R-Genk password R-G-Ssh
+!
+ip domain-name genk.corp.com
+!
+spanning-tree mode pvst
+!
+interface GigabitEthernet0/0/0
+ ip address 10.10.0.1 255.255.255.252
+ duplex auto
+ speed auto
+ ipv6 address FE80::1 link-local
+ ipv6 address 2001:DB8:0:3::1/64
+!
+interface GigabitEthernet0/0/1
+ ip address 192.168.0.1 255.255.255.240
+ duplex auto
+ speed auto
+ ipv6 address FE80::1 link-local
+ ipv6 address 2001:DB8:0:1::1/64
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip classless
+!
+ip flow-export version 9
+!
+ip access-list extended SSH-ACCESS
+ permit ip host 192.168.0.13 any
+ permit ip host 192.168.0.14 any
+ deny ip any any
+!
+line con 0
+ password R-G-Console
+ login
+!
+line aux 0
+!
+line vty 0 4
+ access-class SSH-ACCESS in
+ login local
+ transport input ssh
+line vty 5 15
+ access-class SSH-ACCESS in
+ login local
+ transport input ssh
+!
+end
